@@ -55,29 +55,48 @@ int main() {
     std::cout << "podaj liczbe produktow do wygenerowania: ";
     std::cin >> liczbaProduktow;
     produkty = generujLosoweProdukty(liczbaProduktow);
-    
+    auto mapaCen = generujMapeCen(produkty);
+
     wyswietlProdukty(produkty);
     
     int opcja;
-    std::cout << "\nwpisz numer produktu aby zobaczyc informacje (0 aby zakonczyc): ";
+    std::cout << "0: wyjscie z programu\n1: informacje o produkcie\n2:informacja o cenach\n";
     std::cin >> opcja;
-    while (opcja != 0) {
-        if (opcja > 0 && opcja <= static_cast<int>(produkty.size())) {
-            wyswietlInfoOProdukcie(produkty[opcja - 1]);
-        } else {
-            std::cout << "nieprawidlowy numer produktu.\n";
+    while(opcja != 0) {
+    switch(opcja) {
+        case 1:
+        {
+            std::cout << "\nwpisz numer produktu aby zobaczyc informacje: ";
+            int nr;
+            std::cin>>nr;
+            if (nr > 0 && nr <= static_cast<int>(produkty.size())) {
+            wyswietlInfoOProdukcie(produkty[nr - 1]);}
+                else{
+                    std::cout << "nieprawidlowa opcja\n";
+                }
+            break;
         }
-        std::cout << "\nwpisz numer produktu aby zobaczyc informacje (0 aby zakonczyc): ";
-        std::cin >> opcja;
-    }
-
-    std::map<std::string, std::vector<double>> mapaCen = generujMapeCen(produkty);
-    std::cout << "\nmapa cen:\n";
-    for (const auto& [nazwa, ceny] : mapaCen) {
-        std::cout << nazwa << ":\n";
-        for (const auto& cena : ceny) {
-            std::cout << cena << " zł\n";
+        case 2: 
+        {
+            std::string nazwaProd;
+            std::cout << "\nwpisz nazwe produktu aby zobaczyc informacje o jego cenach: ";
+            std::cin >> nazwaProd;
+            auto ceny = mapaCen[nazwaProd];
+            if(ceny.empty()){
+                std::cout << "\nnie znaleziono produktu\n";
+            } else{
+            for(auto cena : ceny){
+                std::cout << cena << "\n";
+            }}
+            break;
         }
+        default: {
+            std::cout << "nieprawidlowa opcja\n";
+            break;
+        }
+        }
+            std::cout << "0: wyjscie z programu\n1: informacje o produkcie\n2:informacja o cenach\n";
+        std::cin >> opcja;   
     }
 
     return 0;
